@@ -1,0 +1,25 @@
+{
+  "dependencies": {
+    "body-parser": "^1.19.1",
+    "ejs": "^3.1.6",
+    "express": "^4.17.2",
+    "sequelize": "^7.0.0-alpha.4",
+    "sqlite3": "^5.0.2"
+  },
+  "name": "app-nodemcu-node",
+  "version": "1.0.0",
+  "description": "Aplicação simples desenvolvida por Lucas Oliveira para o portal Engtecs",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "nodemcu",
+    "esp8266",
+    "node",
+    "sensors",
+    "simple"
+  ],
+  "author": "Lucas Oliveira",
+  "license": "ISC"
+}

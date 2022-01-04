@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+
+    <title>NodeMCU + Node.JS</title>
+
+    <!--head-->
+    <%- include('./partials/head'); %>
+
+</head>
+
+<body>
+    <!--menu-->
+    <%- include('./partials/menu'); %>
+
+        <!--header-->
+        <%- include('./partials/header'); %>
+
+            <% if (page=='index' ) { %>
+                <%- include('./pages/home'); %>
+                    <% } %>
+                        <% if (page=='sensor' ) { %>
+                            <%- include('./pages/sensor'); %>
+
+                                <% } %>
+
+                                    </div>
+                                    <!--footer-->
+                                    <%- include('./partials/footer'); %>
+
+
+
+</body>
+
+</html>

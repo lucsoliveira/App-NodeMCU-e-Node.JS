@@ -1,0 +1,145 @@
+<div class="ui breadcrumb">
+    <a class="section">Home</a>
+    <div class="divider"> / </div>
+    <div class="active section">Dashboard</div>
+</div>
+
+<br />
+
+
+<div class="ui clearing segment">
+
+
+    <div class="ui middle aligned divided list" style="margin-bottom:10px;">
+        <div class="item">
+            <div class="right floated content">
+                <button class="ui primary button tiny" onclick="show_add_form()">
+                    Adicionar
+                </button>
+            </div>
+
+            <div class="content">
+                <h3 class="ui header">
+                    Meus sensores
+                </h3>
+
+            </div>
+        </div>
+    </div>
+
+    <% if(msg) { %>
+        <div class="ui warning message">
+            <i class="close icon"></i>
+            <div class="header">
+                <%= msg %>
+            </div>
+        </div>
+        <% }%>
+
+            <!--formulário para adicionar sensor-->
+            <div id="sensor_add_form" style="display:none;">
+                <form class="ui form" method="post" action="/sensor/add">
+                    <div class="field">
+                        <label>UID (Identificação)</label>
+                        <input type="text" name="uid" placeholder="Identificação" required>
+                    </div>
+
+                    <div class="field">
+                        <label>Descrição</label>
+                        <input type="text" name="desc" placeholder="Descrição" required>
+                    </div>
+
+                    <div class="field">
+                        <label>Unidade</label>
+                        <input type="text" name="unidade" placeholder="Unidade" required>
+                    </div>
+
+                    <button class="ui button" type="submit">Cadastrar</button>
+                </form>
+
+                <br />
+            </div>
+
+            <!--lista sensores-->
+            <div class="ui middle aligned divided list" id="lista_sensores">
+
+            </div>
+
+</div>
+
+
+<!--scripts-->
+<script type="text/javascript">
+
+    // obtem uma lista de sensores através da API
+    getSensores();
+
+    function getSensores() {
+
+        axios.get('/api/sensor/get/all', {
+
+        })
+            .then(function (response) {
+
+                let sensores = response.data.data.sensores
+
+                //verifica se o tamanho da lista de sensores é maior que 0
+                if (sensores.length > 0) {
+
+                    console.log('sensores: ', sensores)
+
+                    container_lista = document.getElementById('lista_sensores');
+
+                    // acrescenta um bloco "div item" dentro da div "lista_sensores"
+                    // sendo cada bloco um sensor cadastrado no banco
+                    for (let i = 0; i < sensores.length; i++) {
+
+                        aux_block = document.createElement('div');
+                        aux_block.classList.add('item');
+                        aux_block.innerHTML = '<div class="right floated content">' +
+                            '<a href="/sensor/visualizar?uid=' + sensores[i].uid + '"><div class="ui icon button"><i class="eye icon"></i></div></a>' +
+                            '<a href="/sensor/deletar?uid=' + sensores[i].uid + '"><div class="ui icon button"><i class="delete icon"></i></div></a>' +
+                            '</div>' +
+                            '<div class="content"><b>' + sensores[i].uid +
+                            '</b><p>' + sensores[i].desc + '</p>' +
+                            '</div>'
+
+                        container_lista.appendChild(aux_block);
+
+                    }
+
+                    return;
+
+
+                } else {
+                    // caso contrário retorna uma mensagem de erro
+                    console.log('Não há sensores')
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+                document.getElementById('lista_sensores').innerHTML = '<div class="ui warning message"><div class="header">Não foram encontrados sensores. Clique no botão acima para adicionar.</div></div>';
+
+                return;
+            })
+            .then(function () {
+                // always executed
+
+                return;
+            });
+    }
+
+    function show_add_form() {
+        document.getElementById("sensor_add_form").style.display = "block"
+    }
+
+    $('.message .close')
+        .on('click', function () {
+            $(this)
+                .closest('.message')
+                .transition('fade')
+                ;
+        })
+        ;
+
+</script>

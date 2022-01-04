@@ -1,0 +1,163 @@
+<% if (data) { %>
+    <div class="ui breadcrumb">
+        <a class="section" href="/">Home</a>
+        <div class="divider"> / </div>
+        <a class="section">Sensor</a>
+        <div class="divider"> / </div>
+        <a class="section">Visualizar</a>
+        <div class="divider"> / </div>
+        <div class="active section">
+            <%= data.sensor.uid %>
+        </div>
+    </div>
+
+
+    <!--Cabeçalho sensor-->
+    <div class="ui clearing segment">
+
+        <div class="ui middle aligned divided list">
+
+            <div class="item">
+                <div class="right floated content">
+                    <!--ultimo valor coletado-->
+                    <div class="ui right floated">
+                        <div class="ui small horizontal statistics">
+                            <div class="statistic">
+                                <div class="value" id="ultima_coleta">
+
+                                </div>
+                                <div class="label">
+                                    <%= data.sensor.unidade %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content">
+
+                    <h2 class="ui header">
+                        <%= data.sensor.uid %>
+                    </h2>
+                    <p>
+                        <%= data.sensor.desc %>
+                    </p>
+
+                </div>
+            </div>
+
+        </div>
+
+
+
+    </div>
+
+    <!--tabela últimos valores-->
+    <div class="ui clearing segment">
+
+        <h2 class="ui header">
+            Últimas coletas
+        </h2>
+
+        <div class="ui celled table" id="ultimas_coletas_table"></div>
+    </div>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            var intervaloAtualizacao = 3; // em segundos
+
+            //cria a tabela usando o tabulator
+            //define data array
+            //var tabledata = valores;
+
+            var table = new Tabulator("#ultimas_coletas_table", {
+                data: [{ id: 0, id_sensor: 0, valor: 0, createdAt: '', updatedAt: '' }], //assign data to table
+                autoColumns: true, //create columns from data field names
+                layout: "fitColumns",      //fit columns to width of table
+                responsiveLayout: "hide",  //hide columns that dont fit on the table
+                addRowPos: "top",          //when adding a new row, add it to the top of the table
+                history: true,             //allow undo and redo actions on the table
+                pagination: "local",       //paginate the data
+                paginationSize: 10,         //allow 10 rows per page of data
+                movableColumns: true,      //allow column order to be changed
+                resizableRows: true,       //allow row order to be changed
+            });
+
+            // atualiza os dados da tabela
+
+            setInterval(function () {
+
+                updateValores(table)
+
+            }, intervaloAtualizacao * 1000);
+
+            setInterval(getUltimaColeta, intervaloAtualizacao * 1000);
+
+            // obtem todas as ultimas coletas
+            function updateValores(table) {
+
+                let limite = 100;
+
+                // Make a request for a user with a given ID
+                axios.get('/api/coleta/get/all?uid=<%= data.sensor.uid %>&limite=' + limite)
+                    .then(function (response) {
+
+                        // handle success
+                        let coletas = response.data.data.coletas;
+
+                        table.replaceData(coletas)
+
+                    })
+                    .catch(function (error) {
+                        // handle error
+                        console.log(error);
+                        document.getElementById('ultimas_coletas_table').innerHTML = '<div class="ui warning message"><div class="header">Não foram encontradas coletas para esse sensor. Clique <a href="/"> aqui </a> para voltar ao início e aguardar as coletas.</div></div>';
+
+                        return;
+                    })
+                    .then(function () {
+
+                        return;
+                    });
+
+            }
+
+            // função de obtenção de ultima coleta somente
+            function getUltimaColeta() {
+
+                // Make a request for a user with a given ID
+                axios.get('/api/coleta/get/last?uid=<%= data.sensor.uid %>')
+                    .then(function (response) {
+
+                        // handle success
+                        let coleta = response.data.data.coleta;
+                        document.getElementById("ultima_coleta").innerHTML = coleta.valor
+
+                        // atualiza a div com o ultimo valor
+
+                        return;
+
+                    })
+                    .catch(function (error) {
+                        // handle error
+                        console.log(error);
+                        //document.getElementById('ultimas_coletas_table').innerHTML = '<div class="ui warning message"><div class="header">Não foram encontradas coletas para esse sensor.</div></div>';
+
+                        return;
+                    })
+                    .then(function () {
+
+                        return;
+                    });
+
+            }
+        });
+
+
+    </script>
+
+    <% }else{ %>
+
+        <% } %>
