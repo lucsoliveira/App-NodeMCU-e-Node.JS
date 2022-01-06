@@ -1,16 +1,19 @@
 <% if (data) { %>
-    <div class="ui breadcrumb">
-        <a class="section" href="/">Home</a>
-        <div class="divider"> / </div>
-        <a class="section">Sensor</a>
-        <div class="divider"> / </div>
-        <a class="section">Visualizar</a>
-        <div class="divider"> / </div>
-        <div class="active section">
-            <%= data.sensor.uid %>
+
+    <div class="ui clearing segment">
+
+        <div class="ui breadcrumb">
+            <a class="section" href="/">Home</a>
+            <div class="divider"> / </div>
+            <a class="section">Sensor</a>
+            <div class="divider"> / </div>
+            <a class="section">Visualizar</a>
+            <div class="divider"> / </div>
+            <div class="active section">
+                <%= data.sensor.uid %>
+            </div>
         </div>
     </div>
-
 
     <!--Cabeçalho sensor-->
     <div class="ui clearing segment">

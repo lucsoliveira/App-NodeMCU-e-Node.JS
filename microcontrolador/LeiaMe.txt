@@ -1,0 +1,6 @@
+As bibliotecas dentro da pasta "libraries" devem ser copiadas para a máquina local que compilará o código no Arduino IDE.
+
+No Windows:
+	
+	Copie o conteúdo da pasta "libraries" e cole em "C:\Users\SEUUSUARIO\Documents\Arduino\libraries", onde o "SEUUSUARIO" deve constar o nome de usuário de sua máquina.
+	Após isso o código poderá ser compilado sem problemas.
